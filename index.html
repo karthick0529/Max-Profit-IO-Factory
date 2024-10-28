@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Max Profit Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    pre {
+      background-color: #eb8282;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Max Profit Calculator</h1>
+  <button onclick="displayOutput(7)">Calculate Max Profit for 7</button>
+  <button onclick="displayOutput(8)">Calculate Max Profit for 8</button>
+  <button onclick="displayOutput(13)">Calculate Max Profit for 13</button>
+
+  <div id="output"></div>
+
+  <script>
+    function calculateMaxProfit(n) {
+      let data = {
+        units: [5, 4, 10],
+        earnings: [1500, 1000, 3000],
+      };
+    
+      var minUnit = Math.min(...data.units),
+          totalEarningArray = [];
+    
+      var tempResult = data.units.map((value, index) => {
+        var input = n,
+            earnings = 0,
+            tempArray = [];
+        while (input >= minUnit) {
+          input -= value;
+          if (input >= 0) {
+            earnings += input * data.earnings[index];
+            tempArray.push(earnings);
+          }
+        }
+        totalEarningArray.push(earnings);
+        return tempArray;
+      });
+    
+      var maxEarning = Math.max(...totalEarningArray);
+    
+      var totalOutputArray = totalEarningArray.map((value, index) =>
+        maxEarning === value ? tempResult[index].length : 0
+      );
+    
+      var output = totalOutputArray
+        .map((value, index) =>
+          value !== 0
+            ? `${index + 1}. T: ${index === 0 ? value : 0} P: ${
+                index === 1 ? value : 0
+              } C: ${index === 2 ? value : 0}\n`
+            : ""
+        )
+        .join("");
+    
+      return `Time Unit: ${n}\nEarnings: $${maxEarning}\nSolutions \n${output}`;
+    }
+
+    function displayOutput(n) {
+      const result = calculateMaxProfit(n);
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = `<pre>${result}</pre>`;
+    }
+  </script>
+
+</body>
+</html>
